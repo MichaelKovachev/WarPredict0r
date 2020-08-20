@@ -24,6 +24,9 @@ public:
 		Invalid = 0
 	};
 
+	//friend bool operator<(const Card& c1, const Card& c2);
+	//friend bool operator>(const Card& c1, const Card& c2);
+	//friend bool operator==(const Card& c1, const Card& c2);
 public:
 	Player() = default;
 	void Init();
@@ -32,13 +35,52 @@ public:
 	
 	// Adds a card to the bottom of the deck
 	void AppendToDeck(Card card);
+	void AppendToDeck(const std::vector<Card>& cards);
+
+	// Use a custom deck
+	void UseDeck(const std::vector<Card>& deck);
+
 	void PrintDeck();
+
+	unsigned int GetDeckIndex() const { return deckIndex; }
+
+	//friend bool isPlayer1CardStronger(const Player& p1, const Player& p2);
+	//friend bool arePlayerCardsEqual(const Player& p1, const Player& p2);
+
 
 private:
 	void HandleInputToDeck();
 	Card MatchStringToCard(const std::string& str) const;
-	const std::string MatchCardToString(const Card card) const;
+
+public:
+	static const std::string MatchCardToString(const Card card);
+
 private:
-	static constexpr unsigned int deckSize = 26;
+	static constexpr unsigned int initialDeckSize = 26;
 	std::vector<Card> deck;
+
+	unsigned int deckIndex = 0;
 };
+
+//bool arePlayerCardsEqual(const Player& p1, const Player& p2)
+//{
+//	return p1.deck[p1.deckIndex] == p2.deck[p2.deckIndex];
+//}
+//
+//bool isPlayer1CardStronger(const Player& p1, const Player& p2)
+//{
+//	return p1.deck[p1.deckIndex] > p2.deck[p2.deckIndex];
+//}
+
+//bool operator<(const Player::Card& c1, const Player::Card& c2)
+//{
+//	return static_cast<unsigned int>(c1) < static_cast<unsigned int>(c2);
+//}
+//bool operator>(const Player::Card& c1, const Player::Card& c2)
+//{
+//	return static_cast<unsigned int>(c1) > static_cast<unsigned int>(c2);
+//}
+//bool operator==(const Player::Card& c1, const Player::Card& c2)
+//{
+//	return static_cast<unsigned int>(c1) == static_cast<unsigned int>(c2);
+//}

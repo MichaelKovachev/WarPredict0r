@@ -2,24 +2,25 @@
 
 #include <iostream>
 #include <string>
+#include <array>
 
 
 void Player::Init()
 {
-	deck.reserve(deckSize);
+	//deck.reserve(initialDeckSize);
 	HandleInputToDeck();
 }
 
-bool Player::DrawNext(std::vector<Card>& drawedCards, unsigned int amount)
+bool Player::DrawNext(std::vector<Card>& drawnCards, unsigned int amount)
 {
 	if (amount <= 3 && amount >= 1)
 	{
 		// if the player doesn't have enough cards, he loses
-		if (deck.size() >= amount) return false;
+		if (amount > deck.size()) return false;
 
 		for (unsigned int i = 1; i <= amount; ++i)
 		{
-			drawedCards.emplace_back(deck.front());
+			drawnCards.push_back(deck[0]);
 			deck.erase(deck.begin());
 			
 		}
@@ -29,7 +30,19 @@ bool Player::DrawNext(std::vector<Card>& drawedCards, unsigned int amount)
 
 void Player::AppendToDeck(Card card)
 {
-	deck.insert(deck.begin(), card);
+	deck.push_back(card);
+}
+
+void Player::AppendToDeck(const std::vector<Card>& cards)
+{
+	for (const auto& card : cards)
+		AppendToDeck(card);
+}
+
+void Player::UseDeck(const std::vector<Card>& deck)
+{
+
+	this->deck = deck;
 }
 
 void Player::PrintDeck()
@@ -47,7 +60,7 @@ void Player::HandleInputToDeck()
 	std::getline(std::cin, inputDeckStr);
 	std::remove_if(inputDeckStr.begin(), inputDeckStr.end(), std::isspace);
 	
-	for (unsigned int iterationCount = 0, index = 0; iterationCount < deckSize; )    // index is the index in the string
+	for (unsigned int iterationCount = 0, index = 0; iterationCount < initialDeckSize; )    // index is the index in the string
 	{
 		// We need to handle the case where the card number is 10 separately
 		if (inputDeckStr[index] == '1' 
@@ -80,7 +93,7 @@ Player::Card Player::MatchStringToCard(const std::string& str) const
 	return Card::Invalid;
 }
 
-const std::string Player::MatchCardToString(const Card card) const
+const std::string Player::MatchCardToString(const Card card)
 {
 	unsigned int intCard = static_cast<int>(card);
 

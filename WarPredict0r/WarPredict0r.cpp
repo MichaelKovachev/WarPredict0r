@@ -2,8 +2,9 @@
 
 int main()
 {
+    bool shouldGenerateShuffledDecks = true;
     Game game;
-    game.Init();
+    game.Init(shouldGenerateShuffledDecks);
     game.Run();
 }
 
