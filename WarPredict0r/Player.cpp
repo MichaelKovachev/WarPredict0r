@@ -5,10 +5,10 @@
 #include <array>
 
 
-void Player::Init()
+bool Player::Init()
 {
 	//deck.reserve(initialDeckSize);
-	HandleInputToDeck();
+	return HandleInputToDeck();
 }
 
 bool Player::DrawNext(std::vector<Card>& drawnCards, unsigned int amount)
@@ -54,10 +54,17 @@ void Player::PrintDeck()
 	std::cout << std::endl;
 }
 
-void Player::HandleInputToDeck()
+bool Player::HandleInputToDeck()
 {
 	std::string inputDeckStr;
 	std::getline(std::cin, inputDeckStr);
+
+	if (inputDeckStr.size() < 26 || inputDeckStr.size() > 26)
+	{
+		std::cout << "Invalid deck size. Enter exactly 26 cards" << std::endl;
+		return false;
+	}
+
 	std::remove_if(inputDeckStr.begin(), inputDeckStr.end(), std::isspace);
 	
 	for (unsigned int iterationCount = 0, index = 0; iterationCount < initialDeckSize; )    // index is the index in the string
@@ -79,6 +86,7 @@ void Player::HandleInputToDeck()
 
 		++iterationCount;
 	}
+	return true;
 }
 
 Player::Card Player::MatchStringToCard(const std::string& str) const

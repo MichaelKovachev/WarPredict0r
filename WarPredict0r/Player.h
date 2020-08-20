@@ -29,7 +29,7 @@ public:
 	//friend bool operator==(const Card& c1, const Card& c2);
 public:
 	Player() = default;
-	void Init();
+	bool Init();
 	// Returns true if the player had enough cards to draw the amount from
 	bool DrawNext(std::vector<Card>& drawedCards, unsigned int amount = 1);
 	
@@ -49,7 +49,7 @@ public:
 
 
 private:
-	void HandleInputToDeck();
+	bool HandleInputToDeck();
 	Card MatchStringToCard(const std::string& str) const;
 
 public:

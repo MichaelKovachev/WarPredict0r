@@ -1,15 +1,16 @@
 #include "Game.h"
 #include <random>
 
-void Game::Init(bool shouldGenerateShuffledDecks)
+void Game::Init(bool verbose, bool shouldGenerateShuffledDecks)
 {
+	this->verbose = verbose;
 	if (!shouldGenerateShuffledDecks)
 	{
 		std::cout << "Enter the first player's deck with each card separated by a space. Hit ENTER when you are done:" << std::endl;
-		p1.Init();
+		if (!p1.Init()) { isOver = true; return; }
 
 		std::cout << "Enter the second player's deck with each card separated by a space. Hit ENTER when you are done:" << std::endl;
-		p2.Init();
+		if (!p2.Init()) { isOver = true; return; }
 	}
 	else
 	{
@@ -23,27 +24,30 @@ void Game::Run()
 	{
 		SimulateRound();
 	}
-
-	std::cout << "Player " << winner << " won!" << std::endl;
 }
 
 void Game::SimulateRound()
 {
+	++roundCount;
 	std::vector<Player::Card> p1CardsAtRound;
 	if (!p1.DrawNext(p1CardsAtRound)) 
 	{ 
-		PrintRoundInfo(p1CardsAtRound, std::vector<Player::Card>());
+		if(verbose) PrintRoundInfo(p1CardsAtRound, std::vector<Player::Card>());
+
 		isOver = true; 
 		winner = 1; 
+		PrintRoundWinMessage();
 		return; 
 	}
 
 	std::vector<Player::Card> p2CardsAtRound;
 	if (!p2.DrawNext(p2CardsAtRound))
 	{
-		PrintRoundInfo(p1CardsAtRound, p2CardsAtRound);
+		if(verbose) PrintRoundInfo(p1CardsAtRound, p2CardsAtRound);
+
 		isOver = true;
 		winner = 2;
+		PrintRoundWinMessage();
 		return;
 	}
 
@@ -51,13 +55,21 @@ void Game::SimulateRound()
 	{
 		if (!p1.DrawNext(p1CardsAtRound, 3))
 		{
-			PrintRoundInfo(p1CardsAtRound, p2CardsAtRound);
-			isOver = true; winner = 1; return;
+			if(verbose) PrintRoundInfo(p1CardsAtRound, p2CardsAtRound);
+			
+			isOver = true; 
+			winner = 1; 
+			PrintRoundWinMessage();
+			return;
 		}
 		if (!p2.DrawNext(p2CardsAtRound, 3))
 		{
-			PrintRoundInfo(p1CardsAtRound, p2CardsAtRound);
-			isOver = true; winner = 2; return;
+			if(verbose) PrintRoundInfo(p1CardsAtRound, p2CardsAtRound);
+			
+			isOver = true; 
+			winner = 2; 
+			PrintRoundWinMessage();
+			return;
 		}
 	}
 
@@ -68,14 +80,14 @@ void Game::SimulateRound()
 	if (*(p1CardsAtRound.end() - 1) > * (p2CardsAtRound.end() - 1))
 	{
 		p1.AppendToDeck(currentRoundCards);
-		std::cout << "Player 1 won round. | cards: ";
+		if (verbose) std::cout << "Player 1 won round.";
 	}
 	else
 	{
 		p2.AppendToDeck(currentRoundCards);
-		std::cout << "Player 2 won round. | cards: ";
+		if (verbose) std::cout << "Player 2 won round.";
 	}
-	PrintRoundInfo(p1CardsAtRound, p2CardsAtRound);
+	if(verbose) PrintRoundInfo(p1CardsAtRound, p2CardsAtRound);
 }
 
 void Game::GenerateShuffledRandomDecks()
@@ -111,6 +123,7 @@ void Game::GenerateShuffledRandomDecks()
 
 void Game::PrintRoundInfo(const std::vector<Player::Card>& p1CardsAtRound, const std::vector<Player::Card>& p2CardsAtRound)
 {
+	std::cout << " | cards: ";
 	for (const Player::Card& card : p1CardsAtRound)
 	{
 		std::cout << Player::MatchCardToString(card) << " ";
@@ -121,4 +134,10 @@ void Game::PrintRoundInfo(const std::vector<Player::Card>& p1CardsAtRound, const
 		std::cout << Player::MatchCardToString(card) << " ";
 	}
 	std::cout << std::endl;
+}
+
+void Game::PrintRoundWinMessage()
+{
+	std::cout << "Player " << winner << " won!" << std::endl;
+	std::cout << "Number of rounds played: " << roundCount << std::endl;
 }
