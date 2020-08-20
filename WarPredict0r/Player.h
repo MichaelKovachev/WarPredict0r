@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 #include <queue>
 #include <vector>
 
@@ -29,8 +29,8 @@ public:
 	// Returns true if the player had enough cards to draw the amount from
 	bool DrawNext(std::vector<Card>& drawedCards, unsigned int amount = 1);
 	void AppendToDeck(Card card);
+	void PrintDeck();
 
 private:
-	std::queue<Card> deck;
+	std::vector<Card> deck;
 };
-

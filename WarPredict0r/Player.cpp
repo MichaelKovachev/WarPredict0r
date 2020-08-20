@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <iostream>
 
 Player::Player()
 {
@@ -7,14 +8,15 @@ Player::Player()
 
 bool Player::DrawNext(std::vector<Card>& drawedCards, unsigned int amount)
 {
-	if (deck.size() >= amount) return false;
-
 	if (amount <= 3 && amount >= 1)
 	{
+		// if the player doesn't have enough cards, he loses
+		if (deck.size() >= amount) return false;
+
 		for (unsigned int i = 1; i <= amount; ++i)
 		{
 			drawedCards.emplace_back(deck.front());
-			deck.pop();
+			deck.erase(deck.begin());
 		}
 	}
 	return true;
@@ -22,5 +24,14 @@ bool Player::DrawNext(std::vector<Card>& drawedCards, unsigned int amount)
 
 void Player::AppendToDeck(Card card)
 {
-	deck.push(card);
+	deck.insert(deck.begin(), card);
+}
+
+void Player::PrintDeck()
+{
+	for (const Card& card : deck)
+	{
+		std::cout << static_cast<int>(card) << " ";
+	}
+	std::cout << std::endl;
 }
