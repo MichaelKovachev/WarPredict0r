@@ -24,9 +24,6 @@ public:
 		Invalid = 0
 	};
 
-	//friend bool operator<(const Card& c1, const Card& c2);
-	//friend bool operator>(const Card& c1, const Card& c2);
-	//friend bool operator==(const Card& c1, const Card& c2);
 public:
 	Player() = default;
 	bool Init();
@@ -44,10 +41,6 @@ public:
 
 	unsigned int GetDeckIndex() const { return deckIndex; }
 
-	//friend bool isPlayer1CardStronger(const Player& p1, const Player& p2);
-	//friend bool arePlayerCardsEqual(const Player& p1, const Player& p2);
-
-
 private:
 	bool HandleInputToDeck();
 	Card MatchStringToCard(const std::string& str) const;
@@ -61,26 +54,3 @@ private:
 
 	unsigned int deckIndex = 0;
 };
-
-//bool arePlayerCardsEqual(const Player& p1, const Player& p2)
-//{
-//	return p1.deck[p1.deckIndex] == p2.deck[p2.deckIndex];
-//}
-//
-//bool isPlayer1CardStronger(const Player& p1, const Player& p2)
-//{
-//	return p1.deck[p1.deckIndex] > p2.deck[p2.deckIndex];
-//}
-
-//bool operator<(const Player::Card& c1, const Player::Card& c2)
-//{
-//	return static_cast<unsigned int>(c1) < static_cast<unsigned int>(c2);
-//}
-//bool operator>(const Player::Card& c1, const Player::Card& c2)
-//{
-//	return static_cast<unsigned int>(c1) > static_cast<unsigned int>(c2);
-//}
-//bool operator==(const Player::Card& c1, const Player::Card& c2)
-//{
-//	return static_cast<unsigned int>(c1) == static_cast<unsigned int>(c2);
-//}

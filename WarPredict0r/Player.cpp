@@ -7,7 +7,6 @@
 
 bool Player::Init()
 {
-	//deck.reserve(initialDeckSize);
 	return HandleInputToDeck();
 }
 
